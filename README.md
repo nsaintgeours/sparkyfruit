@@ -81,6 +81,9 @@ On lance ensuite un job Spark avec comme argument notre script Python :
 > ~/spark-3.2.0-bin-hadoop3.2/bin/spark-submit run_from_image_df.py
 ```
 
+Pour surveiller l'exécution du job, il faut lancer un navigateur web et aller sur l'URL `localhost:4040` pour ouvrir
+l'interface web de monitoring de Spark.
+
 ### Lancer le job Spark sur un cluster EC2
 
 **A COMPLETER**
