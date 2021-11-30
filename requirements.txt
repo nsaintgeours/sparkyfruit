@@ -1,0 +1,7 @@
+requests
+pyspark
+torch
+torchvision
+boto3
+numpy
+pillow
