@@ -307,3 +307,10 @@ only showing top 20 rows
 ```
 
 Et voilà !
+
+
+> *NOTE* il y a souvent sur les tutos de la configuration additionnelle à ajouter à la création de la session Spark, mais j'ai l'impression que ça marche sans ça : 
+> `#.config("spark.jars.packages", "com.amazonaws:aws-java-sdk-bundle:1.11.901,org.apache.hadoop:hadoop-aws:-3.3.1")
+            .config("spark.hadoop.fs.s3a.endpoint", "s3.eu-west-3.amazonaws.com")
+            #.config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+            #.config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain")`
