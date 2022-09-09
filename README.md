@@ -27,7 +27,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	- Images de fruits à récupérer sur Kaggle : https://www.kaggle.com/datasets/moltean/fruits
 	- Créer un dossier différent pour chaque classe de fruit (2 ou 3 classes)
 	- Dans chaque dossier, uploader une dizaine de photos de fruits
-
+ 
 
 ## 3. Créer un serveur virtuel EC2
 
