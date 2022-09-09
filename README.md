@@ -176,14 +176,31 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 
 ## 5. Installer Spark et PySpark
 
+- Installer Java SDK
 ```
 sudo amazon-linux-extras install java-openjdk11
 ```
 
+- Installer la librairie Python PySpark avec :
 ```
-pip3 install pyspark
+[ec2-user@ip-172-31-33-35 ~]$ pip3 install pyspark==3.2.2
 ```
 
+- Relancer le serveur Jupyter Notebook et ouvrir un notebook ((voir point précédent)
+
+- Dans le notebook Jupyter, le bloc de code suivant permet de lancer une petite démo de PySpark : 
+
+```
+from pyspark import SparkContext
+from pyspark.sql import SparkSession
+
+sc = SparkContext()
+sc.setLogLevel("ERROR")
+
+spark = SparkSession(sparkContext=sc)
+nums = spark.sparkContext.parallelize([1,2,3,4])
+print(nums.map(lambda x: x*x).collect())
+```
 
 # Sparky'Fruit (AWS, AMI Ubuntu)
 
@@ -267,6 +284,11 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 
 - Depuis Ia console Linux ouverte au point précedent, installer les outils suivants sur l'instance EC2 : 
 
+	- Mettre à jour tout le système avec : 
+	```
+	sudo apt update && sudo apt upgrade -y
+	```
+
 	- Python3 est déjà installé par défaut, on peut vérifier la version avec :
 	
 	```
@@ -274,8 +296,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	Python 3.10.4
 	```
 	
-  
-	- installer Jupyter (taper sur Entrée quand des fenêtre chelous s'affichent sur la console...)
+  	- installer Jupyter (taper sur Entrée quand des fenêtre chelous s'affichent sur la console...)
 	
 	```
 	[ubuntu@ip-172-31-33-35 ~]$ sudo apt install jupyter-notebook
@@ -332,7 +353,6 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 
 	- installer le gestionnaire de package Python pip3
 	```
-	[ubuntu@ip-172-31-33-35 ~]$ sudo apt-get update
 	[ubuntu@ip-172-31-33-35 ~]$ sudo apt-get install python3-pip
 	```
 
@@ -365,15 +385,32 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
   
 ## 5. Installer Spark et PySpark
 
+- Installer Java (OpenJDK 11)
 ```
-sudo amazon-linux-extras install java-openjdk11
-```
-
-```
-pip3 install pyspark
+[ubuntu@ip-172-31-33-35 ~]$ sudo apt-get install openjdk-11-jre -y
+[ubuntu@ip-172-31-33-35 ~]$ sudo apt-get install openjdk-11-jdk -y
 ```
 
+- Installer la librairie Python PySpark avec :
+```
+[ubuntu@ip-172-31-33-35 ~]$ pip3 install pyspark==3.2.2
+```
 
+- Relancer le serveur Jupyter Notebook et ouvrir un notebook ((voir point précédent)
+
+- Dans le notebook Jupyter, le bloc de code suivant permet de lancer une petite démo de PySpark : 
+
+```
+from pyspark import SparkContext
+from pyspark.sql import SparkSession
+
+sc = SparkContext()
+sc.setLogLevel("ERROR")
+
+spark = SparkSession(sparkContext=sc)
+nums = spark.sparkContext.parallelize([1,2,3,4])
+print(nums.map(lambda x: x*x).collect())
+```
   
 # Sparky'Fruit (local)
 
