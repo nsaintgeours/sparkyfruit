@@ -263,13 +263,10 @@ Si votre installation de PySpark fonctionne, vous obtenez :
 
 ### 6.4. Utiliser PySpark avec accès à S3
 
-- Dans le notebook Jupyter, le bloc de code suivant permet de lancer une petite démo de PySpark : 
+- Dans le notebook Jupyter, à la suite du bloc précédent, le bloc de code suivant permet de lancer une petite démo de PySpark avec accès aux images stockées sur S3: 
 
 
 ```
-from pyspark.sql import SparkSession
-spark = SparkSession.builder.master("local[*]").appName("MonPySpark").config("spark.hadoop.fs.s3a.endpoint", "s3.eu-west-3.amazonaws.com").getOrCreate()
-
 s3_bucket_name = 'sparkyfruit'
 df = spark.read.format('Image').load(f's3a://{s3_bucket_name}/*/*.jpg')
 df.show()
@@ -310,7 +307,13 @@ Et voilà !
 
 
 > *NOTE* il y a souvent sur les tutos de la configuration additionnelle à ajouter à la création de la session Spark, mais j'ai l'impression que ça marche sans ça : 
-> `#.config("spark.jars.packages", "com.amazonaws:aws-java-sdk-bundle:1.11.901,org.apache.hadoop:hadoop-aws:-3.3.1")
+
+```
+spark = ( SparkSession.builder.master("local[*]").appName("MonPySpark").config("spark.hadoop.fs.s3a.endpoint", "s3.eu-west-3.amazonaws.com")
+            .config("spark.jars.packages", "com.amazonaws:aws-java-sdk-bundle:1.11.901,org.apache.hadoop:hadoop-aws:-3.3.1")
             .config("spark.hadoop.fs.s3a.endpoint", "s3.eu-west-3.amazonaws.com")
-            #.config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
-            #.config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain")`
+            .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+            .config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain")
+	    .getOrCreate()
+	    )
+```
