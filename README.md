@@ -1,84 +1,90 @@
-# 1. Sparky'Fruit (AWS, AMI Amazon Linux 2)
+# Sparky'Fruit
 
-Ce projet est un exemple minimaliste d'utilisation de Spark avec Python.
+Ce projet est un exemple minimaliste d'utilisation de PySpark sur un serveur virtuel AWS EC2.
 L'objectif est de traiter un grand nombre d'images disponibles sur un stockage AWS S3.
 Le traitement consiste à encoder les images sous forme d'un vecteur de taille fixe à l'aide d'un réseau de neurones pré-entraîné.
 
-## 1.0. Création d'un compte AWS
+## 1. Création d'un compte AWS
 
-- Depuis un navigateur web : 
-	- Créer un compte AWS
-	- Se connecter à son compte AWS
-	- Accéder à la 'AWS Management Console' (https://eu-west-3.console.aws.amazon.com/console)
+- Créer et activer un compte AWS : voir [ici](https://aws.amazon.com/fr/premiumsupport/knowledge-center/create-and-activate-aws-account/)
+- Se connecter à son compte AWS
+- Accéder à la [AWS Management Console](https://eu-west-3.console.aws.amazon.com/console)
 
-## 1.1. Stocker un échantillon de données sur AWS S3
+## 2. Stocker un échantillon d'images sur AWS S3
 
-- Dans la 'AWS Management Console'  en ligne :
-
-	- Accéder au service S3 : https://s3.console.aws.amazon.com/s3
+- Accéder au [service AWS S3](https://s3.console.aws.amazon.com/s3)
 	
-	- Créer un bucket S3 avec la configuration suivante : 
-		- bucket name: sparkyfruit 
-		- AWS region: EU (Paris) eu-west-3
-		- Object ownership: ACLs disabled
-		- Block all public access
-		- Bucket versioning: Disable
-		- No tags
-		- Server-side encryption: Disable
+- Créer un **bucket S3** avec la configuration suivante : 
+	- bucket name: *sparkyfruit *
+	- AWS region: *EU (Paris) eu-west-3*
+	- Object ownership: *ACLs disabled*
+	- Block all public access
+	- Bucket versioning: *Disable*
+	- No tags
+	- Server-side encryption: *Disable*
 		
-	- Uploader à la main un échantillon de photos de fruits dans le bucket S3 :
-	    - Créer un dossier différent pour chaque classe de fruit (2 ou 3 classes)
-		- Dans chaque dossier, uploader une dizaine de photos de fruits
+- **Uploader** un échantillon d'images de fruits au format .jpg dans le bucket S3 :
+	- Images de fruits à récupérer sur Kaggle : https://www.kaggle.com/datasets/moltean/fruits
+	- Créer un dossier différent pour chaque classe de fruit (2 ou 3 classes)
+	- Dans chaque dossier, uploader une dizaine de photos de fruits
 
 
-## 1.2. Créer un serveur virtuel dans le cloud (EC2)
-
-- Dans la 'AWS Management Console'  en ligne :
-
-	- Accèder au service EC2 : https://eu-west-3.console.aws.amazon.com/ec2
-	
-	- Menu de gauche : sélectionner "Instances"
-	
-	- Bouton orange en haut à droite : Launch instances / Launch instances
-	
-	- Lancer une instance EC2 avec les caractéristiques suivantes : 
-	
-		- name: sparkyfruit
-		- Amazon Machine Image (AMI): laisser le choix par défaut ("Amazon Linux 2 AMI (HVP) - Kernel 5.10 SSD volume type"), 64 bits
-		- Instance type : t2.medium (4 GO RAM, 30 Go disque dur) (coût estimé < 10 Euros) 
-		- Key pair (login) : cliquer sur "Generate a new key pair" et se laisser guider (sélectionner "Proceed without a key pair (Not recommended)")
-		- Network settings : 
-			- Firewall (security groups) : sélectionner "Create security group" avec la configuration suivante :
-				- Allow SSH traffic from : Anywhere
-				- Allow HTTPs traffic from the internet: No
-				- Allow HTTP traffic from the internet: No
-		- Configure storage : 1 x 30 GiB gp2 (root volume)
-		- Lancer l'instance (ça peut prendre une ou deux minutes)
-		
-		
-	- On va maintenant ajouter une autorisation d'accès au serveur virtuel pour pouvoir accéder aux notebooks Jupyter par la suite : 
-		- Menu de gauche, aller dans Network & Security / Security Groups
-		- Sélectionner dans la liste le groupe de sécurité qui vient d'être créé, il s'appelle "launch-wizard-1" (case à cocher à gauche)
-		- En bas on voit les propriétés du groupe de sécurité : sélectionner l'onglet "Inbound rules"
-		- Bouton "Edit inbound rules"
-		- Bouton "Add rule" : ajouter une règle d'accès avec les caractéristiques suivantes : 
-			- Tpe : Custom TCP
-			- Protocol : TCP
-			- Port range: 8888
-			- Source: Anywhere ipv4
-		- Cliquer sur le bouton "Save rules"
-		
-		
-	- On peut maintenant se connecter à l'instance EC2 : 
-		- Menu de gauche : sélectionner "Instances"
-		- Dans la liste des instances, sélectionner l'instance que l'on vient de démarrer (case à cocher à gauche du nom de l'instance)
-		- Bouton "Connect" -> on arrive sur un menu "Connect to instance", laisser les options par défaut et cliquer en bas sur le bouton orange "Connect"
-		- une nouvelle page s'ouvre dans le navigateur web, avec une console Linux
+## 3. Créer un serveur virtuel EC2
 
 
-## 1.3. Accèder à un notebook Jupyter dans le cloud (EC2)
+- Accèder au [service AWS EC2](https://eu-west-3.console.aws.amazon.com/ec2)
 
-- Depuis Ia console Linux ouverte au point précedent, installer les outils suivants sur l'instance EC2 : 
+- Dans le menu de gauche, sélectionner **Instances / Instances**
+
+- Cliquer sur le bouton orange en haut à droite : **Launch instances / Launch instances**
+
+- **Démarrer une nouvelle instance EC2** avec les caractéristiques suivantes : 
+
+	- name: *sparkyfruit*
+	- Amazon Machine Image (AMI): laisser le choix par défaut (*Amazon Linux 2 AMI (HVP) - Kernel 5.10 SSD volume type*), 64 bits
+	- Instance type : **t2.medium**
+	- Key pair (login) : cliquer sur **Generate a new key pair** et se laisser guider
+	- Network settings : 
+		- Firewall (security groups) : sélectionner "Create security group" avec la configuration par défaut suivante :
+			- Allow SSH traffic from : Anywhere
+			- Allow HTTPs traffic from the internet: No
+			- Allow HTTP traffic from the internet: No
+	- Configure storage : **1 x 30 GiB gp2 (root volume)**
+	- Lancer l'instance (ça peut prendre une ou deux minutes)
+
+- Une fois l'instance EC2 démarrée, on va noter dans un coin son **adresse IP publique**, qui nous permettra d'accèder au serveur virtuel depuis internet
+	- Menu de gauche : sélectionner **Instances / Instances**
+	- Dans la liste des instances, sélectionner l'instance que l'on vient de démarrer (case à cocher à gauche du nom de l'instance)
+	- Les propriétés de l'instance EC2 apparaissent dans la moitié basse de la fenêtre
+	- Dans l'onglet *Details*, noter la valeur de la **Public IPv4 address** (par exemple : `35.181.154.147`)
+	- :warning: l'adresse publique de notre instance EC2 change à chaque arrêt redémarrage de l'instance ! :warning:
+
+
+- Il nous faut ensuite **autoriser le flux réseau entrant sur le port 8888** pour pouvoir utiliser les notebooks Jupyter sur notre instance EC2. Pour ce faire, on suit les étapes suivantes : 
+	- Menu de gauche, aller dans **Network & Security / Security Groups**
+	- Sélectionner dans la liste le groupe de sécurité qui vient d'être créé, il s'appelle normalement `launch-wizard-1` (case à cocher à gauche)
+	- Les propriétés du groupe de sécurité apparaissent dans la moitié basse de la fenêtre : sélectionner l'onglet **Inbound rules**
+	- Cliquer sur le **bouton "Edit inbound rules"**
+	- Cliquer sur le bouton **Add rule** et ajouter une règle d'accès avec les caractéristiques suivantes : 
+		- Type : *Custom TCP*
+		- Protocol : *TCP*
+		- Port range: *8888*
+		- Source: *Anywhere ipv4*
+	- Cliquer sur le bouton **Save rules**
+	- C'est bon pour ce point !
+
+
+- On peut maintenant **se connecter à l'instance EC2** : 
+	- Menu de gauche : sélectionner **Instances / Instances**
+	- Dans la liste des instances, sélectionner l'instance que l'on vient de démarrer (case à cocher à gauche du nom de l'instance)
+	- Cliquer sur le **bouton "Connect"**
+	- on arrive sur une nouvelle page *Connect to instance* : laisser les options par défaut et cliquer en bas sur le **bouton orange "Connect"**
+	- une nouvelle page s'ouvre dans le navigateur web, avec **une console Linux** : ça y est, on est sur notre serveur virtuel !
+
+
+## 4. Utiliser un notebook Jupyter sur le serveur virtuel EC2
+
+- Depuis la **console Linux** ouverte au point 3, on suite les étapes suivantes pour installer Jupyter et ouvrir un notebook : 
 
 	- Python3 est déjà installé par défaut, on peut vérifier la version avec :
 	
@@ -87,13 +93,13 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	Python 3.7.10
 	```
 	
-	- installer Jupyter (à l'aide de pip3, gestionnaire de packages Python): 
+	- installer Jupyter (à l'aide de `pip3`, le gestionnaire de packages Python): 
 	
 	```
 	[ec2-user@ip-172-31-33-35 ~]$ pip3 install jupyter
 	```
 	
-	- on configure un nouveau mot de passe pour sécuriser l'accès aux notebooks Jupyter dans le cloud 
+	- pour sécuriser l'accès aux notebooks Jupyter sur notre serveur virtuel, on configure un mot de passe :
 	
 	```
 	[ec2-user@ip-172-31-33-35 ~]$ jupyter notebook password
@@ -105,60 +111,54 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	[ec2-user@ip-172-31-33-35 ~]$ jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
 	```
 
-- Dans le navigateur web, revenir sur le service EC2 : https://eu-west-3.console.aws.amazon.com/ec2
-
-	- Menu de gauche, aller dans Instances / Instances
-		- Dans la liste des instances EC2, sélectionner l'instance EC2 que l'on a démarré (case à cocher à gauche)
-		- En bas, dans les propriétés de l'instance, noter la "Public IPv4 address" (ex: 13.39.47.167). 
-			(attention : cette adresse publique de notre instance EC2 change à chaque arrêt redémarrage de l'instance !)
-		
-	- Dans le navigateur web, accèder à l'URL suivante : xx.xx.xx.xxx:8888, en remplaçant xx.xx.xx.xxx par l'adresse IP publique de l'instance EC2
+- **Dans le navigateur web, accèder à l'URL suivante : `xx.xx.xx.xxx:8888`**, en remplaçant `xx.xx.xx.xxx` par l'adresse IP publique de l'instance EC2
 	
-	- Le serveur Jupyter Notebook s'ouvre, avec sécurisation de l'accès par le mot de passe que l'on a défini précédemment
+- Le serveur Jupyter Notebook s'ouvre, avec sécurisation de l'accès par le mot de passe que l'on a défini précédemment
 	
-	- Créer un nouveau notebook, l'ouvrir, et tester si tout fonctionne !
+- Créer **un nouveau notebook**, l'ouvrir, et tester si tout fonctionne !
 
 
-## 1.4. Accèder aux images stockées sur S3 depuis le notebook Jupyter
+## 5. Accèder aux images stockées sur S3 depuis le notebook Jupyter
 
-- On commence par donner à notre instance EC2 les droits d'accès à l'espace de stokage S3 : 
+Pour que l'on puisse accéder aux données stockées sur S3 depuis notre notebook Jupyter, il faut que le serveur virtuel EC2 ait le droit d'accès à S3, en lecture. 
+On suit les étapes suivantes pour lui donner ce droit d'accès : 
 
-	- Dans un navigateur web, ouvrir la "AWS Management Console" et accèder au service **IAM**
-		- Menu de gauche : Roles
-		- Bouton Create Roles	
-			- Trusted Entity Type : laisser par défaut la valeur "AWS Service"
-			- Use case : sélectionner "EC2"
-		- Permission policies : rechercher **AmazonS3FullAccess**
-		- Bouton "Create Role"
-		
-	- Dans un navigateur web, ouvrir la "AWS Management Console" et accèder au service EC2	
-		- Menu de gauche, Instances / Instances
-		- Sélectionner notre instance (case à cocher à gauche)
-		- En haut, menu Actions / Security / Modify IAM role
-		- Sélectionner le role que l'on a créé, puis bouton "Update IAM Role"
-		
-	- Console Linux EC2 : 
-	
-	```
-	[ec2-user@ip-172-31-33-35 ~]$ aws s3 ls s3://sparkyfruit
-	--> on doit avoir la liste des dossiers sdans le bucket s3
-	```
+- Dans un navigateur web, accèder au [**service AWS IAM**](https://us-east-1.console.aws.amazon.com/iamv2)
+	- Dans le menu de gauche, cliquer sur **Roles**
+	- Cliquer sur le bouton **Create Roles** et créer un nouveau rôle avec les options suivantes :
+		- Trusted Entity Type : laisser par défaut la valeur *"AWS Service"*
+		- Use case : sélectionner *"EC2"*
+	- Permission policies : rechercher **AmazonS3FullAccess**
+	- Role name: ce que l'on veut, par exemple `s3_access`
+	- Cliquer sur le bouton "Create Role"
 
-- Depuis Ia console Linux ouverte au point 2, installer la librairie Python boto3, qui permet d'interagir avec l'espace de stockage AWS S3 :
+- Accèder au [service AWS EC2](https://eu-west-3.console.aws.amazon.com/ec2)
+	- Dans le menu de gauche, aller dans **Instances / Instances**
+	- Sélectionner notre instance EC2 dans la liste des instances (case à cocher à gauche)
+	- En haut, aller dans menu **Actions / Security / Modify IAM role**
+	- Sélectionner le rôle *s3_access** que l'on vient de créer, puis cliquer sur le bouton **Update IAM Role**
+
+- Pour vérifier que notre instance EC2 a maintenant accès à l'espace de stockage S3, on tape la commande suivante dans la **console Linux de notre instance EC2** : 
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ aws s3 ls s3://sparkyfruit
+```
+--> on doit obtenir la liste des dossiers présents dans le bucket s3.
+
+On va maintenant écrire du code dans le notebook Jupyter pour charger l'une des images présentes sur S3. 
+Pour cela, on a besoin de deux packages Python : `boto3`, qui permet d'interagir avec S3, et `pillow`, qui permet de manipuler des images. 
+On commence donc par installer ces deux packages sur notre instance EC2. 
+
+- dans la **console Linux** de notre instance EC2, taper :
 
 	```
 	[ec2-user@ip-172-31-33-35 ~]$ pip3 install boto3
-	```
-	
-- Depuis Ia console Linux ouverte au point 2, installer la librairie Python pillow, qui permet de manipuler des images :
-
-	```
 	[ec2-user@ip-172-31-33-35 ~]$ pip3 install pillow
 	```
-	
-- Relancer le serveur Jupyter Notebook et ouvrir un notebook ((voir point précédent)
+		
+- comme déjà expliqué au point 4, relancer le serveur Jupyter Notebook et ouvrir un nouveau notebook
 
-- Dans le notebook Jupyter, le bloc de code suivant permet de charger et d'afficher une des images stockées sur votre bucket S3 : 
+- dans le notebook Jupyter, taper le bloc de code suivant permet de charger et d'afficher une des images stockées sur votre bucket S3 : 
 
 	```
 	import boto3
@@ -172,21 +172,74 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	PIL.Image.open(image['Body'])
 	```
 
+Et voilà !
 
 
-## 1.5. Installer Spark et PySpark
+## 6. Installer PySpark et configurer son accès à S3
 
-- Installer Java SDK
+### Installer PySpark
+
+- Spark a besoin de **Java** pour tourner, on commence donc par installer **Java OpenJDK 11**, via la console Linux de notre instance EC2 :
+
 ```
-sudo amazon-linux-extras install java-openjdk11
+[ec2-user@ip-172-31-33-35 ~]sudo amazon-linux-extras install java-openjdk11
 ```
 
-- Installer la librairie Python PySpark avec :
+- on installe ensuite **PySpark** à l'aide du gestion de package `pip3`. On choisit dans ce tutoriel d'installer la version `3.2.2` de PySpark :
+
 ```
 [ec2-user@ip-172-31-33-35 ~]$ pip3 install pyspark==3.2.2
 ```
 
-- Relancer le serveur Jupyter Notebook et ouvrir un notebook ((voir point précédent)
+
+### Configurer PySpark pour son accès à S3
+
+Il nous faut configurer PySpark pour qu'il puisse accéder aux données stockées sur S3.
+:warning: Cette partie est un peu pénible. :warning:
+
+- Identifier le dossier dans lequel le **package `pyspark` a été installé**, et s'y déplacer : 
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ cd /home/ec2-user/.local/lib/python3.7/site-packages/pyspark
+```
+
+> **_NOTE:_**  Si ce n'est pas le bon chemin de dossier, on peut rechercher le dossier avec la commande suivante : `find . -name pyspark`
+
+- Se déplacer dans le dossier `/jars` qui contient tous les modules Java utiles à Pyspark
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ cd jars
+```
+
+- Dans ce dossier, on commence par **vérifier la version du module `hadoop-client`** qui a été installée. Pour cela : 
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ ls | grep hadoop-client
+hadoop-client-api-3.3.2.jar
+hadoop-client-runtime-3.3.2.jar
+```
+
+Sur mon instance, la version du module `hadoop-client` est la **`3.3.2`** (même numéro de version que `pyspark`, mais ça n'est pas forcément le cas !).
+
+- toujours dans ce dossier, **on ajoute le module Java `hadoop-aws`** que l'on télécharge depuis internet, avec le numéro de version identifié précedement (ici `3.3.2`):
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.2/hadoop-aws-3.3.2.jar
+```
+
+- toujours dans ce dossier, **on ajoute le module Java `aws-java-sdk-bundle`** que l'on télécharge depuis internet, avec le numéro de version `1.12.246`:
+
+```
+[ec2-user@ip-172-31-33-35 ~]$ wget https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.246/aws-java-sdk-bundle-1.12.246.jar
+```
+
+Et voilà pour cette partie ardue, c'est terminé !
+
+
+### Utiliser PySpark
+
+
+- Depuis la **console Linux de notre instance EC2**, relancer le serveur Jupyter Notebook et ouvrir un notebook (voir point 4)
 
 - Dans le notebook Jupyter, le bloc de code suivant permet de lancer une petite démo de PySpark : 
 
@@ -201,6 +254,8 @@ spark = SparkSession(sparkContext=sc)
 nums = spark.sparkContext.parallelize([1,2,3,4])
 print(nums.map(lambda x: x*x).collect())
 ```
+
+Si tout tourne sans erreur, votre installation de PySpark fonctionne.
 
 # 2. Sparky'Fruit (AWS, AMI Ubuntu)
 
