@@ -233,6 +233,9 @@ Sur mon instance, la version du module `hadoop-client` est la **`3.3.2`** (même
 [ec2-user@ip-172-31-33-35 ~]$ wget https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.246/aws-java-sdk-bundle-1.12.246.jar
 ```
 
+> **_NOTE:_** Pour connaître la version de `aws-jdk-sdk-bundle` à installer, il faut regarder les dépendances de la librairie `hadoop-aws`. Ces
+dépenances sont listés sur le site suivant : [https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws](https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws). Il suffit de sélectionner la bonne version d'`hadoop-aws` (ici `3.3.2`), puis de naviguer dans la page jusqu'à la section **Compiled dependencies**, où l'on trouve la librairie `com.amazonaws » aws-java-sdk-bundle` avec son numéro de version associé.
+
 Et voilà pour cette partie ardue, c'est terminé !
 
 
