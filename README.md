@@ -1,17 +1,17 @@
-# Sparky'Fruit (AWS, AMI Amazon Linux 2)
+# 1. Sparky'Fruit (AWS, AMI Amazon Linux 2)
 
 Ce projet est un exemple minimaliste d'utilisation de Spark avec Python.
 L'objectif est de traiter un grand nombre d'images disponibles sur un stockage AWS S3.
 Le traitement consiste à encoder les images sous forme d'un vecteur de taille fixe à l'aide d'un réseau de neurones pré-entraîné.
 
-## 0. Création d'un compte AWS
+## 1.0. Création d'un compte AWS
 
 - Depuis un navigateur web : 
 	- Créer un compte AWS
 	- Se connecter à son compte AWS
 	- Accéder à la 'AWS Management Console' (https://eu-west-3.console.aws.amazon.com/console)
 
-## 1. Stocker un échantillon de données sur AWS S3
+## 1.1. Stocker un échantillon de données sur AWS S3
 
 - Dans la 'AWS Management Console'  en ligne :
 
@@ -31,7 +31,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 		- Dans chaque dossier, uploader une dizaine de photos de fruits
 
 
-## 2. Créer un serveur virtuel dans le cloud (EC2)
+## 1.2. Créer un serveur virtuel dans le cloud (EC2)
 
 - Dans la 'AWS Management Console'  en ligne :
 
@@ -76,7 +76,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 		- une nouvelle page s'ouvre dans le navigateur web, avec une console Linux
 
 
-## 3. Accèder à un notebook Jupyter dans le cloud (EC2)
+## 1.3. Accèder à un notebook Jupyter dans le cloud (EC2)
 
 - Depuis Ia console Linux ouverte au point précedent, installer les outils suivants sur l'instance EC2 : 
 
@@ -119,7 +119,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	- Créer un nouveau notebook, l'ouvrir, et tester si tout fonctionne !
 
 
-## 4. Accèder aux images stockées sur S3 depuis le notebook Jupyter
+## 1.4. Accèder aux images stockées sur S3 depuis le notebook Jupyter
 
 - On commence par donner à notre instance EC2 les droits d'accès à l'espace de stokage S3 : 
 
@@ -174,7 +174,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 
 
 
-## 5. Installer Spark et PySpark
+## 1.5. Installer Spark et PySpark
 
 - Installer Java SDK
 ```
@@ -202,20 +202,20 @@ nums = spark.sparkContext.parallelize([1,2,3,4])
 print(nums.map(lambda x: x*x).collect())
 ```
 
-# Sparky'Fruit (AWS, AMI Ubuntu)
+# 2. Sparky'Fruit (AWS, AMI Ubuntu)
 
 Ce projet est un exemple minimaliste d'utilisation de Spark avec Python.
 L'objectif est de traiter un grand nombre d'images disponibles sur un stockage AWS S3.
 Le traitement consiste à encoder les images sous forme d'un vecteur de taille fixe à l'aide d'un réseau de neurones pré-entraîné.
 
-## 0. Création d'un compte AWS
+## 2.0. Création d'un compte AWS
 
 - Depuis un navigateur web : 
 	- Créer un compte AWS
 	- Se connecter à son compte AWS
 	- Accéder à la 'AWS Management Console' (https://eu-west-3.console.aws.amazon.com/console)
 
-## 1. Stocker un échantillon de données sur AWS S3
+## 2.1. Stocker un échantillon de données sur AWS S3
 
 - Dans la 'AWS Management Console'  en ligne :
 
@@ -235,7 +235,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 		- Dans chaque dossier, uploader une dizaine de photos de fruits
 
 
-## 2. Créer un serveur virtuel dans le cloud (EC2)
+## 2.2. Créer un serveur virtuel dans le cloud (EC2)
 
 - Dans la 'AWS Management Console'  en ligne :
 
@@ -280,7 +280,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 		- une nouvelle page s'ouvre dans le navigateur web, avec une console Linux
 
 
-## 3. Accèder à un notebook Jupyter dans le cloud (EC2)
+## 2.3. Accèder à un notebook Jupyter dans le cloud (EC2)
 
 - Depuis Ia console Linux ouverte au point précedent, installer les outils suivants sur l'instance EC2 : 
 
@@ -330,7 +330,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 
 
 
-## 4. Accèder aux images stockées sur S3 depuis le notebook Jupyter
+## 2.4. Accèder aux images stockées sur S3 depuis le notebook Jupyter
 
 - On commence par donner à notre instance EC2 les droits d'accès à l'espace de stokage S3 : 
 
@@ -383,7 +383,7 @@ Le traitement consiste à encoder les images sous forme d'un vecteur de taille f
 	PIL.Image.open(image['Body'])
 	```
   
-## 5. Installer Spark et PySpark
+## 2.5. Installer Spark et PySpark
 
 - Installer Java (OpenJDK 11)
 ```
@@ -412,13 +412,13 @@ nums = spark.sparkContext.parallelize([1,2,3,4])
 print(nums.map(lambda x: x*x).collect())
 ```
   
-# Sparky'Fruit (local)
+# 3. Sparky'Fruit (local)
 
 Ce projet est un exemple minimaliste d'utilisation de Spark avec Python.
 L'objectif est de traiter un grand nombre d'images disponibles sur un stockage AWS S3.
 Le traitement consiste à encoder les images sous forme d'un vecteur de taille fixe à l'aide d'un réseau de neurones pré-entraîné.
 
-## Création d'un espace de stockage S3 sur AWS
+## 3.1 Création d'un espace de stockage S3 sur AWS
 
 J'ai copié le jeu de données **Fruits 360 Dataset** sur un espace de stockage S3 lié à mon compte AWS :
 
@@ -426,9 +426,9 @@ J'ai copié le jeu de données **Fruits 360 Dataset** sur un espace de stockage 
 - création d'un utilisateur S3 via la console AWS en ligne
 - enregistrement sur mon PC d'un fichier contenant les clés d'accès à mon stockage S3 : voir fichier `~/.aws/credentials`
 
-## Fonctionnement en local (sur mon PC)
+## 3.2 Fonctionnement en local (sur mon PC)
 
-### Installation d'une machine virtuelle Linux sur mon poste
+### 3.2.a Installation d'une machine virtuelle Linux sur mon poste
 
 Spark ne fonctionne pas sous Windows. J'ai donc du installer une machine virtuelle Linux pour faire fonctionner le projet sur mon PC.
 
@@ -451,7 +451,7 @@ On suppose qu'à la fin de cette installation :
 - un dossier partagé nommé `sparkyfruit` est accessible depuis la machine virtuelle, il contient le code source de ce projet
 - Spark est disponible à la racine de mon répertoire personnel : `~/spark-3.2.0-bin-hadoop3.2/`
 
-### Configuration de Spark en local
+### 3.2.b Configuration de Spark en local
 
 Il faut éditer la configuration de Spark pour :
 - réduire le niveau de log
@@ -484,7 +484,7 @@ Note: ces ajouts ne sont nécessaires que pour le script `run_from_image_df.py`.
 log4j.rootCategory=ERROR, console
 ```
 
-### Lancer le job Spark en local
+### 3.2.c Lancer le job Spark en local
 
 Le script doit être lancé sur la machine virtuelle Ubuntu. On suppose donc que celle-ci est ouverte et opérationnelle.
 On commence par se déplacer dans le dossier partagé, contenant le script Python que l'on veut lancer : `run_from_image_df.py`.
@@ -498,6 +498,6 @@ On lance ensuite un job Spark avec comme argument notre script Python :
 Pour surveiller l'exécution du job, il faut lancer un navigateur web et aller sur l'URL `localhost:4040` pour ouvrir
 l'interface web de monitoring de Spark.
 
-### Lancer le job Spark sur un cluster EC2
+### 3.2.d Lancer le job Spark sur un cluster EC2
 
 **A COMPLETER**
